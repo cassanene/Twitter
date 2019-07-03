@@ -18,6 +18,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (weak, nonatomic) IBOutlet UILabel *usernameLabel;
 @property (weak, nonatomic) IBOutlet UILabel *tweetLabel;
 @property (strong, nonatomic) Tweet *tweet;
+@property (weak, nonatomic) IBOutlet UILabel *timestampLabel;
 
 
 

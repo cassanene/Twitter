@@ -33,49 +33,48 @@
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
     
-    UIRefreshControl *refreshControl = [[UIRefreshControl alloc] init];
-    [refreshControl addTarget:self action:@selector(beginRefresh:) forControlEvents:UIControlEventValueChanged];
-    [self.tableView insertSubview:refreshControl atIndex:0];
+    [self getTimeline];
+// added the selector to already created refreshcontrol in the interface
+    self.refreshControl = [[UIRefreshControl alloc] init];
+    [self.refreshControl addTarget:self action:@selector(getTimeline) forControlEvents:UIControlEventValueChanged];
+    [self.tableView insertSubview:self.refreshControl atIndex:0];
     [self.tableView addSubview:self.refreshControl];
     [self.activityIndicator startAnimating];
-    
-    
-    
+}
 
-    
-    
-    
-    
+
+- (void)getTimeline {
     // Get timeline
-//    makes API request on your behalf
+    //    makes API request on your behalf
     [[APIManager shared] getHomeTimelineWithCompletion:^(NSArray *tweets, NSError *error) {
         if (tweets) {
-//            because it gets tweets back from the network
+            //            because it gets tweets back from the network
             
             self.tweets = [NSArray arrayWithArray:tweets];
-
+            
             NSLog(@"😎😎😎 Successfully loaded home timeline");
             for (Tweet *tweet in tweets) {
                 NSString *text = tweet.text;
                 NSLog(@"%@", text);
-
+                
             }
             [self.tableView reloadData];
-
+            
+//            [self.activityIndicator stopAnimating];
+            
         } else {
-
+            
             NSLog(@"😫😫😫 Error getting home timeline: %@", error.localizedDescription);
         }
         
+//
 
-        
         // Stop the activity indicator
-        // Hides automatically if "Hides When Stopped" is enabled
         [self.activityIndicator stopAnimating];
-
+        // Hides automatically if "Hides When Stopped" is enabled
+        [self.refreshControl endRefreshing];
+        
     }];
-    
-    [self.refreshControl endRefreshing];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -113,19 +112,18 @@
 //}
 
 /*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
+ #pragma mark - Navigation
+ // In a storyboard-based application, you will often want to do a little preparation before navigation
+ - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+ // Get the new view controller using [segue destinationViewController].
+ // Pass the selected object to the new view controller.
+ }
+ */
 
 //tbale view asks for datasource and numofrows and cellForRow
 - (nonnull UITableViewCell *)tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath
 {
-
+    
     TweetCell* cell = [self.tableView dequeueReusableCellWithIdentifier:@"TweetCell" forIndexPath:indexPath];
     Tweet* tweet = self.tweets[indexPath.row];
     
@@ -134,7 +132,7 @@
     cell.screennameLabel.text = tweet.user.screenName;
     cell.tweetLabel.text = tweet.text;
     
-
+    
     return cell;
 }
 

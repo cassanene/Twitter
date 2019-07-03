@@ -58,7 +58,7 @@
         <!--Home Timeline-->
         <scene sceneID="1Tv-nE-1AW">
             <objects>
-                <viewController storyboardIdentifier="TimelineViewController" id="Lbl-k5-U4i" customClass="TimelineViewController" sceneMemberID="viewController">
+                <viewController id="Lbl-k5-U4i" customClass="TimelineViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="bdH-tK-EYk"/>
                         <viewControllerLayoutGuide type="bottom" id="pGj-sa-aq5"/>
@@ -191,7 +191,6 @@
                     <connections>
                         <outlet property="activityIndicator" destination="B7e-D8-LzA" id="nHs-as-O2J"/>
                         <outlet property="tableView" destination="TNv-Na-8JS" id="HpL-fk-MKK"/>
-                        <outlet property="view" destination="B7e-D8-LzA" id="qmU-vd-0pF"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="oQh-hN-GQg" userLabel="First Responder" sceneMemberID="firstResponder"/>
