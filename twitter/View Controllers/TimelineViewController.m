@@ -29,6 +29,10 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    //  used to give the table view information
+    self.tableView.dataSource = self;
+    self.tableView.delegate = self;
+    
     UIRefreshControl *refreshControl = [[UIRefreshControl alloc] init];
     [refreshControl addTarget:self action:@selector(beginRefresh:) forControlEvents:UIControlEventValueChanged];
     [self.tableView insertSubview:refreshControl atIndex:0];
@@ -37,10 +41,7 @@
     
     
     
-//  used to give the table view information
-    self.tableView.dataSource = self;
-    self.tableView.delegate = self;
-    
+
     
     
     
@@ -51,20 +52,22 @@
         if (tweets) {
 //            because it gets tweets back from the network
             
-//            self.tweets = [NSArray arrayWithArray:tweets];
+            self.tweets = [NSArray arrayWithArray:tweets];
 
             NSLog(@"😎😎😎 Successfully loaded home timeline");
             for (Tweet *tweet in tweets) {
                 NSString *text = tweet.text;
                 NSLog(@"%@", text);
+
             }
+            [self.tableView reloadData];
 
         } else {
 
             NSLog(@"😫😫😫 Error getting home timeline: %@", error.localizedDescription);
         }
         
-        [self.tableView reloadData];
+
         
         // Stop the activity indicator
         // Hides automatically if "Hides When Stopped" is enabled
@@ -122,18 +125,16 @@
 //tbale view asks for datasource and numofrows and cellForRow
 - (nonnull UITableViewCell *)tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath
 {
+
     TweetCell* cell = [self.tableView dequeueReusableCellWithIdentifier:@"TweetCell" forIndexPath:indexPath];
     Tweet* tweet = self.tweets[indexPath.row];
     
     
-    cell.tweetLabel.text = tweet.user.name;
+    cell.usernameLabel.text = tweet.user.name;
     cell.screennameLabel.text = tweet.user.screenName;
-    
+    cell.tweetLabel.text = tweet.text;
     
 
-//    cell.tweet = tweet;
-    
-    
     return cell;
 }
 
