@@ -13,6 +13,7 @@
 
 + (instancetype)shared;
 
+//callling function thats owned by the view controller
 - (void)getHomeTimelineWithCompletion:(void(^)(NSArray *tweets, NSError *error))completion;
 
 @end
