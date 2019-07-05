@@ -18,6 +18,10 @@
     [self.favoriteButton setImage:[UIImage imageNamed:@"favor-icon-red.png"] forState:UIControlStateSelected];
     
     [self.favoriteButton setImage:[UIImage imageNamed:@"favor-icon.png"] forState:UIControlStateNormal];
+    
+    [self.retweetButton setImage:[UIImage imageNamed:@"retweet-icon-green.png"] forState:UIControlStateSelected];
+    
+    [self.retweetButton setImage:[UIImage imageNamed:@"retweet-icon.png"] forState:UIControlStateNormal];
 }
     // Configure the view for the selected state
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
@@ -25,38 +29,58 @@
 
 }
 - (IBAction)didTapLike:(id)sender {
-    
-
-
-        // TODO: Update the local tweet model
+    // TODO: Update the local tweet model
     if (self.tweet.favorited == YES) {
         self.tweet.favorited = NO;
         self.tweet.favoriteCount -= 1;
-        NSLog(@"COunt - 1");
         self.favoriteButton.selected = NO;
-        NSLog(@"YOU TAPPED 😘");
         self.favoritecountLabel.text = [NSString stringWithFormat:@"%d",self.tweet.favoriteCount];
+        
+        [self networkCall];
     }
-    
     else {
         self.tweet.favorited = YES;
         self.tweet.favoriteCount += 1;
-        NSLog(@"Count is: %d", self.tweet.favoriteCount);
-        NSLog(@"Count +1");
         self.favoriteButton.selected = YES;
-        NSLog(@"YOU UNTAPPED 😞");
         self.favoritecountLabel.text = [NSString stringWithFormat:@"%d",self.tweet.favoriteCount];
+        [self networkCall];
     }
-    // TODO: Update cell UI
-//    [self refreshData];
+}
+- (IBAction)didTapRetweet:(id)sender {
+    if (self.tweet.retweeted == YES) {
+        self.tweet.retweeted = NO;
+        self.tweet.retweetCount -= 1;
+        self.retweetButton.selected = NO;
+        self.retweetcountLabel.text = [NSString stringWithFormat:@"%d",self.tweet.retweetCount];
+        
+        [self networkCall];
+    }
+    else {
+        self.tweet.retweeted = YES;
+        self.tweet.retweetCount += 1;
+        self.retweetButton.selected = YES;
+        self.retweetcountLabel.text = [NSString stringWithFormat:@"%d",self.tweet.retweetCount];
+        
+        [self networkCall];
+    }
+    
 }
 
-//-(void)refreshData {
-//    _favoritecountLabel.text = [NSString stringWithFormat:@"%d",self.tweet.favoriteCount];
-//}
 
+-(void)networkCall {
+    [[APIManager shared] favorite:self.tweet completion:^(Tweet *tweet, NSError *error) {
+        if(error){
+            NSLog(@"Error favoriting tweet: %@", error.localizedDescription);
+        }
+        else{
+            NSLog(@"Successfully favorited the following Tweet: %@", tweet.text);
+        }
+    }];
 
+}
 
 
 
 @end
+
+
