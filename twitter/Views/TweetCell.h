@@ -19,6 +19,10 @@ NS_ASSUME_NONNULL_BEGIN
 @property (weak, nonatomic) IBOutlet UILabel *tweetLabel;
 @property (strong, nonatomic) Tweet *tweet;
 @property (weak, nonatomic) IBOutlet UILabel *timestampLabel;
+@property (weak, nonatomic) IBOutlet UIButton *favoriteButton;
+@property (weak, nonatomic) IBOutlet UIButton *retweetButton;
+@property (weak, nonatomic) IBOutlet UILabel *retweetcountLabel;
+@property (weak, nonatomic) IBOutlet UILabel *favoritecountLabel;
 
 
 

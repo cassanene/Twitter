@@ -10,18 +10,18 @@
 #import "APIManager.h"
 #import "TweetCell.h"
 #import "Tweet.h"
+#import "ComposeViewController.h"
+#import "AppDelegate.h"
+#import "LoginViewController.h"
 
-@interface TimelineViewController () <UITableViewDataSource, UITableViewDelegate>
+
+@interface TimelineViewController () <ComposeViewControllerDelegate, UITableViewDataSource, UITableViewDelegate>
 
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (nonatomic, strong) UIRefreshControl *refreshControl;
 @property (strong, nonatomic) NSArray *tweets;
 @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *activityIndicator;
-
-
-
-
 @end
 
 @implementation TimelineViewController
@@ -32,6 +32,7 @@
     //  used to give the table view information
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
+    [UIApplication sharedApplication].delegate;
     
     [self getTimeline];
 // added the selector to already created refreshcontrol in the interface
@@ -82,43 +83,19 @@
     // Dispose of any resources that can be recreated.
 }
 
-// Makes a network request to get updated data
-// Updates the tableView with the new data
-// Hides the RefreshControl
 
-//- (void)beginRefresh:(UIRefreshControl *)refreshControl {
-//
-//    // Create NSURL and NSURLRequest
-//
-//    NSURLSession *session = [NSURLSession sessionWithConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration]
-//                                                          delegate:nil
-//                                                     delegateQueue:[NSOperationQueue mainQueue]];
-//    session.configuration.requestCachePolicy = NSURLRequestReloadIgnoringLocalCacheData;
-//
-//    NSURLSessionDataTask *task = [session dataTaskWithRequest:request
-//                                            completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
-//
-//                                                // ... Use the new data to update the data source ...
-//
-//                                                // Reload the tableView now that there is new data
-//                                                [self.tableView reloadData];
-//
-//                                                // Tell the refreshControl to stop spinning
-//                                                [refreshControl endRefreshing];
-//
-//                                            }];
-//
-//    [task resume];
-//}
 
-/*
- #pragma mark - Navigation
- // In a storyboard-based application, you will often want to do a little preparation before navigation
+
+// #pragma mark - Navigation
+//  In a storyboard-based application, you will often want to do a little preparation before navigation
  - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
- // Get the new view controller using [segue destinationViewController].
- // Pass the selected object to the new view controller.
+//  Get the new view controller using [segue destinationViewController].
+//  Pass the selected object to the new view controller.
+     UINavigationController *navigationController = [segue destinationViewController];
+     ComposeViewController *composeController = (ComposeViewController*)navigationController.topViewController;
+     composeController.delegate = self;
  }
- */
+
 
 //tbale view asks for datasource and numofrows and cellForRow
 - (nonnull UITableViewCell *)tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath
@@ -127,13 +104,26 @@
     TweetCell* cell = [self.tableView dequeueReusableCellWithIdentifier:@"TweetCell" forIndexPath:indexPath];
     Tweet* tweet = self.tweets[indexPath.row];
     
-    
-    cell.usernameLabel.text = tweet.user.name;
-    cell.screennameLabel.text = tweet.user.screenName;
+    cell.usernameLabel.text = [NSString stringWithFormat:@"@%@", tweet.user.screenName];
+    cell.screennameLabel.text = tweet.user.name;
     cell.tweetLabel.text = tweet.text;
-    
-    
+    cell.retweetcountLabel.text = [NSString stringWithFormat:@"%d", tweet.retweetCount];
+    cell.favoritecountLabel.text = [NSString stringWithFormat:@"%d", tweet.favoriteCount];
+    cell.timestampLabel.text = tweet.createdAtString;
     return cell;
+}
+- (IBAction)logoutButton:(id)sender {
+    AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+    
+    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+    LoginViewController *loginViewController = [storyboard instantiateViewControllerWithIdentifier:@"LoginViewController"];
+    appDelegate.window.rootViewController = loginViewController;
+    [[APIManager shared] logout];
+    
+}
+
+- (void)refreshData {
+   
 }
 
 - (NSInteger)tableView:(nonnull UITableView *)tableView numberOfRowsInSection:(NSInteger)section {

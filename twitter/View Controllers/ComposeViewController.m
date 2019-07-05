@@ -7,6 +7,8 @@
 //
 
 #import "ComposeViewController.h"
+#import "APIManager.h"
+
 
 @interface ComposeViewController ()
 @property (weak, nonatomic) IBOutlet UITextView *composeTextView;
@@ -26,11 +28,31 @@
 
     // Do any additional setup after loading the view.
 }
+
+- (void) textViewDidBeginEditing:(UITextView* )textView{
+    [textView setText:@""];
+}
+
+//this dismiss the module after the close button is pressed
 -(IBAction)barButtonCustomPressed:(UIBarButtonItem*)btn
 {
     [self dismissViewControllerAnimated:true completion:nil];
-
 }
+
+- (IBAction)tweetButton:(id)sender {
+    [[APIManager shared] postStatusWithText:[self.composeTextView text] completion:^(Tweet *tweet, NSError *error) {
+        if (tweet) {
+            NSLog(@"😎😎😎 Successfully loaded home timeline");
+        } else {
+            
+            NSLog(@"😫😫😫 Error getting home timeline: %@", error.localizedDescription);
+        }
+    }];
+    [self dismissModalViewControllerAnimated:YES];
+}
+
+
+
 
 
 /*
