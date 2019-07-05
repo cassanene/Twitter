@@ -103,12 +103,15 @@
     
     TweetCell* cell = [self.tableView dequeueReusableCellWithIdentifier:@"TweetCell" forIndexPath:indexPath];
     Tweet* tweet = self.tweets[indexPath.row];
-    
+//    setting local tweet cell.
+    cell.tweet = tweet;
     cell.usernameLabel.text = [NSString stringWithFormat:@"@%@", tweet.user.screenName];
     cell.screennameLabel.text = tweet.user.name;
     cell.tweetLabel.text = tweet.text;
     cell.retweetcountLabel.text = [NSString stringWithFormat:@"%d", tweet.retweetCount];
+    
     cell.favoritecountLabel.text = [NSString stringWithFormat:@"%d", tweet.favoriteCount];
+    
     cell.timestampLabel.text = tweet.createdAtString;
     return cell;
 }
@@ -122,9 +125,6 @@
     
 }
 
-- (void)refreshData {
-   
-}
 
 - (NSInteger)tableView:(nonnull UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     return self.tweets.count;
