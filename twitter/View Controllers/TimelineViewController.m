@@ -13,6 +13,7 @@
 #import "ComposeViewController.h"
 #import "AppDelegate.h"
 #import "LoginViewController.h"
+#import "UIImageView+AFNetworking.h"
 
 
 @interface TimelineViewController () <ComposeViewControllerDelegate, UITableViewDataSource, UITableViewDelegate>
@@ -113,6 +114,11 @@
     cell.favoritecountLabel.text = [NSString stringWithFormat:@"%d", tweet.favoriteCount];
     
     cell.timestampLabel.text = tweet.createdAtString;
+    NSURL *profilepic = [NSURL URLWithString:tweet.user.pfpString];
+    
+    [cell.pfpView setImageWithURL:profilepic];
+   
+    
     return cell;
 }
 - (IBAction)logoutButton:(id)sender {

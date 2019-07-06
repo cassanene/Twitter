@@ -16,6 +16,8 @@ NS_ASSUME_NONNULL_BEGIN
 //This displays user information
 @property (strong, nonatomic) NSString *name;
 @property (strong, nonatomic) NSString *screenName;
+@property (strong, nonatomic) NSString *pfpString;
+
 
 //set up properties based on the dictionary
 - (instancetype)initWithDictionary:(NSDictionary *)dictionary;
